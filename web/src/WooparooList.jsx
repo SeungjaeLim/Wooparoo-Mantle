@@ -15,25 +15,27 @@ function WooparooList(props) {
   };
 
   return (
-    <div>
+    <div class="overflow-x-auto mt-6">
       <table class="min-w-full leading-normal">
         <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Similarity</th>
-            <th>Ranking</th>
+          <tr class="bg-green-500 text-white">
+            <th class="px-5 py-3 border-b-2 border-gray-200">#</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200">Name</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200">Similarity</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200">Ranking</th>
           </tr>
         </thead>
         <tbody>
           <For each={props.wooparoos}>
             {(wooparoo, index) => (
               <>
-                <tr class="cursor-pointer" onClick={() => toggleDetails(wooparoo)}>
-                  <td>{index + 1}</td>
-                  <td>{wooparoo.name}</td>
-                  <td>{wooparoo.similarity}</td>
-                  <td>{/* Ranking Logic Here */}</td>
+                <tr class="hover:bg-gray-100" onClick={() => toggleDetails(wooparoo)}>
+                  <td class="px-5 py-5 border-b border-gray-200">{index() + 1}</td>
+                  <td class="px-5 py-5 border-b border-gray-200">{wooparoo.name}</td>
+                  <td class="px-5 py-5 border-b border-gray-200">{wooparoo.similarity}</td>
+                  <td class="px-5 py-5 border-b border-gray-200">
+                    {/* Ranking Logic Here */}
+                  </td>
                 </tr>
                 {expandedWooparoos().includes(wooparoo) && (
                   <tr>

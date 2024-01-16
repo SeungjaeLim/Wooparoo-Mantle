@@ -8,6 +8,12 @@ function GuessInput(props) {
     setGuess("");
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      submitGuess();
+    }
+  };
+
   return (
     <div class="flex items-center justify-center mt-4">
       <input 
@@ -15,7 +21,8 @@ function GuessInput(props) {
         class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 transition duration-300"
         placeholder="Enter Wooparoo name"
         value={guess()} 
-        onInput={(e) => setGuess(e.target.value)} 
+        onInput={(e) => setGuess(e.target.value)}
+        onKeyDown={handleKeyPress} 
       />
       <button 
         class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

@@ -1,9 +1,35 @@
-import { createSignal, createEffect, For, onMount } from 'solid-js';
+import { createSignal, createEffect, For } from 'solid-js';
 import wooparooNames from './wooparooNames';
 
 function GuessInput(props) {
   const [guess, setGuess] = createSignal("");
   const [suggestions, setSuggestions] = createSignal([]);
+  const [guessedWooparoos, setGuessedWooparoos] = createSignal([]);
+
+  const submitGuess = () => {
+    const currentGuess = guess().trim();
+
+    // Check if the guess is in the list of Wooparoo names
+    if (!wooparooNames.includes(currentGuess)) {
+      alert("Invalid guess. Please guess a valid Wooparoo name.");
+      return;
+    }
+
+    // Check if the guess has already been made
+    if (guessedWooparoos().includes(currentGuess)) {
+      alert("You have already guessed this Wooparoo. Try a different one.");
+      setGuess("");  // Clear the guess input
+      return;
+    }
+
+    // Add the guess to the list of guessed Wooparoos
+    setGuessedWooparoos(prev => [...prev, currentGuess]);
+
+    // Rest of the submit logic
+    props.onGuess(currentGuess);
+    setGuess("");  // Clear the guess input
+    setSuggestions([]);  // Clear suggestions
+  };
 
   const updateSuggestions = (inputText) => {
     if (inputText.length > 0) {
@@ -15,13 +41,6 @@ function GuessInput(props) {
       setSuggestions([]);
     }
   };
-
-  const submitGuess = () => {
-    props.onGuess(guess());
-    setGuess("");
-    setSuggestions([]); // Clear suggestions after submitting
-  };
-
 
   createEffect(() => {
     updateSuggestions(guess());
@@ -46,7 +65,6 @@ function GuessInput(props) {
         />
         <button 
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-md focus:outline-none focus:shadow-outline"
-          style="min-width: 75px;" // Adjust the width as needed
           onClick={submitGuess}>
           Guess
         </button>
@@ -57,7 +75,7 @@ function GuessInput(props) {
             {(suggestion) => (
               <li 
                 class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-left"
-                onClick={() => { setGuess(suggestion); submitGuess(); }}
+                onClick={() => setGuess(suggestion)}
               >
                 {suggestion}
               </li>

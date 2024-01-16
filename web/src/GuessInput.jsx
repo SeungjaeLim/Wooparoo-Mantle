@@ -7,7 +7,7 @@ function GuessInput(props) {
 
   const loadWooparooNames = async () => {
     try {
-      const response = await fetch('/assets/wooparoo.txt');
+      const response = await fetch('/src/assets/wooparoo.txt');
       const text = await response.text();
       const namesArray = text.split('\n').map(name => name.trim().replace(/\r$/, ''));
       setAllWooparooNames(namesArray);

@@ -1,25 +1,20 @@
 import { createSignal, createEffect, For, onMount } from 'solid-js';
+import wooparooNames from './wooparooNames';
 
 function GuessInput(props) {
   const [guess, setGuess] = createSignal("");
   const [suggestions, setSuggestions] = createSignal([]);
-  const [allWooparooNames, setAllWooparooNames] = createSignal([]);
 
-  const loadWooparooNames = async () => {
-    try {
-      const response = await fetch('/wooparoo.txt');
-      const text = await response.text();
-      const namesArray = text.split('\n').map(name => name.trim().replace(/\r$/, ''));
-      setAllWooparooNames(namesArray);
-      console.log("Loaded Wooparoo names:", namesArray);
-    } catch (error) {
-      console.error("Failed to load Wooparoo names:", error);
+  const updateSuggestions = (inputText) => {
+    if (inputText.length > 0) {
+      const filteredSuggestions = wooparooNames.filter(name =>
+        name.toLowerCase().includes(inputText.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
     }
   };
-
-  onMount(() => {
-    loadWooparooNames();
-  });
 
   const submitGuess = () => {
     props.onGuess(guess());
@@ -27,19 +22,6 @@ function GuessInput(props) {
     setSuggestions([]); // Clear suggestions after submitting
   };
 
-  const updateSuggestions = (inputText) => {
-    if (inputText.length > 0) {
-      const names = allWooparooNames();  // Treat it as a function call
-      if (Array.isArray(names)) {
-        const filteredSuggestions = names.filter(name =>
-          name.toLowerCase().includes(inputText.toLowerCase())
-        );
-        setSuggestions(filteredSuggestions);
-      }
-    } else {
-      setSuggestions([]);
-    }
-  };
 
   createEffect(() => {
     updateSuggestions(guess());
